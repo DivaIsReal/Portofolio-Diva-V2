@@ -119,7 +119,8 @@ const Sidebar = ({
 
         <div className="nav-menu-vertical">
           {menuItems.map((item) => (
-            <a
+            <button
+              type="button"
               key={item.id}
               onClick={() => {
                 setActivePage(item.id);
@@ -128,7 +129,7 @@ const Sidebar = ({
               className={activePage === item.id ? 'active' : ''}
             >
               <i className={item.icon}></i> {labels[language][item.labelKey]}
-            </a>
+            </button>
           ))}
         </div>
 

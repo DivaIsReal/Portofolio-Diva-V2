@@ -131,7 +131,7 @@
   flex: 1;
 }
 
-.nav-menu-vertical a {
+.nav-menu-vertical button {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(0.5rem, 0.48vw, 0.55rem);
   text-decoration: none;
@@ -147,33 +147,35 @@
   gap: 12px;
   white-space: nowrap;
   box-shadow: 3px 3px 0 #1a1a2e;
+  width: 100%;
+  text-align: left;
 }
 
-.nav-menu-vertical a i {
+.nav-menu-vertical button i {
   width: 24px;
   font-size: 0.9rem;
   color: #2563eb;
 }
 
-.nav-menu-vertical a:hover {
+.nav-menu-vertical button:hover {
   background: #2563eb;
   color: white;
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 #1a1a2e;
 }
 
-.nav-menu-vertical a:hover i {
+.nav-menu-vertical button:hover i {
   color: white;
 }
 
-.nav-menu-vertical a.active {
+.nav-menu-vertical button.active {
   background: #2563eb;
   color: white;
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 #1a1a2e;
 }
 
-.nav-menu-vertical a.active i {
+.nav-menu-vertical button.active i {
   color: white;
 }
 
@@ -289,7 +291,7 @@
     gap: 8px;
   }
 
-  .nav-menu-vertical a {
+  .nav-menu-vertical button {
     font-size: 0.5rem;
     padding: 10px 10px;
     gap: 8px;
