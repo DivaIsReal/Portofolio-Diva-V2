@@ -1,0 +1,288 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1a1a2e;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 0;
+  position: relative;
+  background: #f5f4ef;
+}
+
+body.dark-mode {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* BACKGROUND PUTIH KERTAS DENGAN TEKSTUR */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.02) 0px,
+      rgba(0, 0, 0, 0.02) 2px,
+      transparent 2px,
+      transparent 8px
+    ),
+    radial-gradient(circle at 30% 40%, rgba(0, 0, 0, 0.01) 1px, transparent 1px),
+    radial-gradient(circle at 70% 85%, rgba(0, 0, 0, 0.008) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 45% 15%, rgba(0, 0, 0, 0.005) 1px, transparent 1px),
+    radial-gradient(circle at 90% 35%, rgba(0, 0, 0, 0.01) 0.8px, transparent 0.8px);
+  background-size: auto, 60px 60px, 80px 80px, 100px 100px, 70px 70px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Efek gradien halus di tepi */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 245, 0.3) 0%, rgba(245, 244, 239, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layout container dengan dua kotak terpisah */
+.dashboard-container {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  gap: clamp(12px, 1.8vw, 24px);
+  max-width: 1700px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: clamp(10px, 1.6vw, 20px);
+  position: relative;
+  z-index: 1;
+}
+
+/* Konten kanan - scrollable */
+.content-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: #ffffff;
+  border: 3px solid #1a1a2e;
+  box-shadow: 8px 8px 0 #1a1a2e;
+  min-height: calc(100vh - 2 * clamp(10px, 1.6vw, 20px));
+  overflow-y: auto;
+}
+
+body.dark-mode .content-wrapper,
+body.dark-mode .sidebar,
+body.dark-mode .pixel-photo-card,
+body.dark-mode .skill-card,
+body.dark-mode .career-card,
+body.dark-mode .project-card,
+body.dark-mode .project-detail-hero,
+body.dark-mode .project-doc-section,
+body.dark-mode .monitor-card,
+body.dark-mode .network-monitor,
+body.dark-mode .log-section,
+body.dark-mode .achievement-list li,
+body.dark-mode .stat-card,
+body.dark-mode .dashboard-quote {
+  background: #111827;
+  color: #e5e7eb;
+  border-color: #93c5fd;
+  box-shadow: 6px 6px 0 #0b1220;
+}
+
+body.dark-mode .description,
+body.dark-mode .project-card p,
+body.dark-mode .project-detail-meta p,
+body.dark-mode .project-doc-paragraph,
+body.dark-mode .stat-card p,
+body.dark-mode .metric-label,
+body.dark-mode .log-entry,
+body.dark-mode .username {
+  color: #cbd5e1;
+}
+
+body.dark-mode .project-tag {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-color: #93c5fd;
+}
+
+body.dark-mode .project-detail-btn,
+body.dark-mode .project-back-btn,
+body.dark-mode .project-link-btn {
+  border-color: #93c5fd;
+  box-shadow: 2px 2px 0 #0b1220;
+}
+
+body.dark-mode .section-title,
+body.dark-mode h1,
+body.dark-mode .sidebar h2,
+body.dark-mode .metric-value,
+body.dark-mode .photo-caption {
+  color: #f8fafc;
+}
+
+body.dark-mode .nav-menu-vertical a,
+body.dark-mode .slider-toggle,
+body.dark-mode .location,
+body.dark-mode .sidebar-close-btn,
+body.dark-mode .mobile-nav-trigger {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-color: #93c5fd;
+}
+
+body.dark-mode .nav-menu-vertical a i,
+body.dark-mode .avatar-large i,
+body.dark-mode .skill-card i,
+body.dark-mode .monitor-title i,
+body.dark-mode .stat-card i {
+  color: #93c5fd;
+}
+
+body.dark-mode .section-title,
+body.dark-mode .hero,
+body.dark-mode .profile-header,
+body.dark-mode .sidebar-footer,
+body.dark-mode .section-divider,
+body.dark-mode .monitor-header {
+  border-color: #93c5fd;
+}
+
+body.dark-mode .about-intro {
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .about-summary {
+  border-bottom-color: #334155;
+}
+
+body.dark-mode .about-subtitle,
+body.dark-mode .about-paragraph,
+body.dark-mode .career-meta,
+body.dark-mode .career-tasks li,
+body.dark-mode .contact-card-content p {
+  color: #cbd5e1;
+}
+
+body.dark-mode .career-toggle-btn {
+  color: #cbd5e1;
+  background: #1f2937;
+  border-color: #93c5fd;
+}
+
+body.dark-mode .career-toggle-btn:hover {
+  color: #93c5fd;
+  background: #0f172a;
+}
+
+body.dark-mode .career-details {
+  border-top-color: #334155;
+}
+
+body.dark-mode .career-logo {
+  background: #1f2937;
+  border-color: #93c5fd;
+  color: #e5e7eb;
+}
+
+body.dark-mode .career-task-title {
+  color: #fde047;
+}
+
+body.dark-mode .contact-card {
+  background: #111827;
+  border-color: #93c5fd;
+  box-shadow: 6px 6px 0 #0b1220;
+}
+
+body.dark-mode .contact-social-heading,
+body.dark-mode .contact-card-content h3 {
+  color: #f8fafc;
+}
+
+body.dark-mode .contact-card-icon {
+  color: #93c5fd;
+}
+
+body.dark-mode .contact-link-btn {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-color: #93c5fd;
+  box-shadow: 2px 2px 0 #0b1220;
+}
+
+body.dark-mode .contact-link-btn:hover {
+  background: #0f172a;
+}
+
+.content-right {
+  padding: clamp(20px, 2.6vw, 40px);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Scrollbar styling */
+.content-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.content-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-left: 1px solid #1a1a2e;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb {
+  background: #1a1a2e;
+}
+
+/* Animasi page */
+.page {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1100px) {
+  .dashboard-container {
+    gap: 14px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 800px) {
+  body {
+    padding: 0;
+  }
+  .dashboard-container {
+    display: block;
+    padding: 12px;
+    padding-top: 64px;
+  }
+  .content-wrapper {
+    min-height: auto;
+  }
+  .content-right {
+    padding: 16px;
+  }
+}
