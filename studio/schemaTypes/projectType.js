@@ -33,6 +33,31 @@ export const projectType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'photos',
+      title: 'Project Photos',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            }),
+          ],
+        },
+      ],
+      description: 'Add one or more photos for this project.',
+    }),
+    defineField({
       name: 'techStack',
       title: 'Tech Stack',
       type: 'array',
@@ -69,6 +94,23 @@ export const projectType = defineType({
       type: 'array',
       of: [
         { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            }),
+          ],
+        },
         {
           type: 'object',
           name: 'commandBlock',

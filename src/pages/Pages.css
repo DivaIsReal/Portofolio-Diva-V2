@@ -571,11 +571,7 @@ h1 {
 }
 
 .project-doc-markdown pre {
-  background: #0f172a;
-  border: 2px solid #1a1a2e;
-  box-shadow: 3px 3px 0 #1a1a2e;
-  padding: 12px;
-  margin: 10px 0;
+  margin: 0;
   overflow-x: auto;
 }
 
@@ -585,6 +581,100 @@ h1 {
   border: 0;
   padding: 0;
   font-size: 0.95rem;
+}
+
+.project-doc-figure {
+  margin: 14px 0;
+}
+
+.project-doc-image {
+  width: 100%;
+  max-width: 980px;
+  border: 2px solid #1a1a2e;
+  box-shadow: 3px 3px 0 #1a1a2e;
+  display: block;
+}
+
+.project-doc-caption {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+
+.project-command-card {
+  margin: 12px 0;
+  background: #121217;
+  border: 2px solid #1a1a2e;
+  box-shadow: 3px 3px 0 #1a1a2e;
+  overflow: hidden;
+}
+
+.project-command-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1a1a21;
+}
+
+.project-command-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-command-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.project-command-dot-red {
+  background: #ff5f57;
+}
+
+.project-command-dot-yellow {
+  background: #febc2e;
+}
+
+.project-command-dot-green {
+  background: #28c840;
+}
+
+.project-command-badge {
+  margin-left: 6px;
+  color: #9ca3af;
+  border: 1px solid rgba(156, 163, 175, 0.35);
+  background: rgba(156, 163, 175, 0.12);
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.project-command-copy {
+  border: 0;
+  background: transparent;
+  color: #d1d5db;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+}
+
+.project-command-copy:hover {
+  color: #ffffff;
+}
+
+.project-command-card pre {
+  padding: 14px;
 }
 
 .project-doc-markdown table {

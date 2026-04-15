@@ -1,17 +1,122 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { PortableText } from '@portabletext/react';
+import { createImageUrlBuilder } from '@sanity/image-url';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './Pages.css';
 import { hasSanityConfig, sanityClient } from '../lib/sanity';
 
+const imageBuilder = sanityClient ? createImageUrlBuilder(sanityClient) : null;
+
+const urlFromAssetRef = (assetRef) => {
+  if (!assetRef || typeof assetRef !== 'string' || !sanityClient) {
+    return null;
+  }
+
+  const parts = assetRef.split('-');
+  if (parts.length < 4) {
+    return null;
+  }
+
+  const id = parts[1];
+  const dimension = parts[2];
+  const format = parts[3];
+
+  return `https://cdn.sanity.io/images/${sanityClient.config().projectId}/${sanityClient.config().dataset}/${id}-${dimension}.${format}`;
+};
+
+const urlFor = (source) => {
+  if (!imageBuilder || !source) {
+    return null;
+  }
+
+  return imageBuilder.image(source).auto('format').fit('max').width(1400).url();
+};
+
+const getDocumentationImageUrl = (value) => {
+  return value?.assetUrl || urlFor(value) || urlFromAssetRef(value?.asset?._ref) || null;
+};
+
+const CommandCodeBlock = ({ code = '' }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setIsCopied(true);
+      window.setTimeout(() => setIsCopied(false), 1200);
+    } catch (error) {
+      setIsCopied(false);
+    }
+  };
+
+  return (
+    <div className="project-command-card">
+      <div className="project-command-header">
+        <div className="project-command-left">
+          <span className="project-command-dot project-command-dot-red" aria-hidden="true"></span>
+          <span className="project-command-dot project-command-dot-yellow" aria-hidden="true"></span>
+          <span className="project-command-dot project-command-dot-green" aria-hidden="true"></span>
+          <span className="project-command-badge">CODE</span>
+        </div>
+        <button type="button" className="project-command-copy" onClick={handleCopy}>
+          <i className="far fa-copy"></i> {isCopied ? 'Copied!' : 'Copy code'}
+        </button>
+      </div>
+      <pre>
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+};
+
 const portableTextComponents = {
   types: {
     commandBlock: ({ value }) => (
-      <pre>
-        <code>{value?.code || ''}</code>
-      </pre>
-    )
+      <CommandCodeBlock code={value?.code || ''} />
+    ),
+    image: ({ value }) => {
+      const imageUrl = getDocumentationImageUrl(value);
+
+      if (!imageUrl) {
+        return null;
+      }
+
+      return (
+        <figure className="project-doc-figure">
+          <img
+            src={imageUrl}
+            alt={value?.alt || 'Project documentation image'}
+            className="project-doc-image"
+            loading="lazy"
+          />
+          {value?.caption && <figcaption className="project-doc-caption">{value.caption}</figcaption>}
+        </figure>
+      );
+    }
+  }
+};
+
+const markdownComponents = {
+  code({ inline, children }) {
+    const code = String(children || '').replace(/\n$/, '');
+
+    if (inline) {
+      return <code>{code}</code>;
+    }
+
+    return <CommandCodeBlock code={code} />;
+  },
+  img({ src, alt }) {
+    if (!src) {
+      return null;
+    }
+
+    return (
+      <figure className="project-doc-figure">
+        <img src={src} alt={alt || 'Project documentation image'} className="project-doc-image" loading="lazy" />
+      </figure>
+    );
   }
 };
 
@@ -42,7 +147,13 @@ const Projects = () => {
           repoUrl,
           demoUrl,
           "thumbnailUrl": thumbnail.asset->url,
-          documentation
+          documentation[]{
+            ...,
+            _type == "image" => {
+              ...,
+              "assetUrl": asset->url
+            }
+          }
         }`;
 
         const sanityProjects = await sanityClient.fetch(query);
@@ -83,7 +194,7 @@ const Projects = () => {
 
     return (
       <div className="project-doc-markdown">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
           {documentationValue}
         </ReactMarkdown>
       </div>
