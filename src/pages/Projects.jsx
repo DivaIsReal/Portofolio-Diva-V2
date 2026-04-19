@@ -3,6 +3,7 @@ import { PortableText } from '@portabletext/react';
 import { createImageUrlBuilder } from '@sanity/image-url';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import './Pages.css';
 import { hasSanityConfig, sanityClient } from '../lib/sanity';
 
@@ -66,6 +67,12 @@ const urlFor = (source) => {
 
 const getDocumentationImageUrl = (value) => {
   return value?.assetUrl || urlFor(value) || urlFromAssetRef(value?.asset?._ref) || null;
+};
+
+const normalizeMarkdownDocumentation = (value) => {
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n');
 };
 
 const CommandCodeBlock = ({ code = '' }) => {
@@ -237,8 +244,8 @@ const Projects = () => {
 
     return (
       <div className="project-doc-markdown">
-        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-          {documentationValue}
+        <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} components={markdownComponents}>
+          {normalizeMarkdownDocumentation(documentationValue)}
         </ReactMarkdown>
       </div>
     );
