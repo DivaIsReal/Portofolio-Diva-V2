@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -78,8 +78,11 @@ const updatePageInUrl = (activePage, mode = 'push') => {
 
 function App() {
   const [activePage, setActivePage] = useState(() => getPageFromUrl());
+  const [displayPage, setDisplayPage] = useState(() => getPageFromUrl());
+  const [transitionStage, setTransitionStage] = useState('enter');
   const [theme, setTheme] = useState('light');
   const [language, setLanguage] = useState('id');
+  const transitionTimeoutRef = useRef(null);
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', theme === 'dark');
@@ -123,8 +126,39 @@ function App() {
     window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
   }, [activePage]);
 
-  const renderPage = () => {
-    switch(activePage) {
+  useEffect(() => {
+    if (activePage === displayPage) {
+      return;
+    }
+
+    setTransitionStage('exit');
+
+    if (transitionTimeoutRef.current) {
+      window.clearTimeout(transitionTimeoutRef.current);
+    }
+
+    transitionTimeoutRef.current = window.setTimeout(() => {
+      setDisplayPage(activePage);
+      setTransitionStage('enter');
+    }, 180);
+
+    return () => {
+      if (transitionTimeoutRef.current) {
+        window.clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, [activePage, displayPage]);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        window.clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const renderPage = (page) => {
+    switch(page) {
       case 'home': return <Home />;
       case 'about': return <About />;
       case 'contents': return <Contents />;
@@ -147,8 +181,8 @@ function App() {
         setLanguage={setLanguage}
       />
       <div className="content-wrapper">
-        <div className="content-right">
-          {renderPage()}
+        <div className={`content-right page-shell page-shell--${transitionStage}`}>
+          {renderPage(displayPage)}
         </div>
       </div>
     </div>
