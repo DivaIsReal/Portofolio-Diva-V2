@@ -554,6 +554,26 @@ h1 {
   line-height: 1.7;
 }
 
+.project-doc-spacer {
+  width: 100%;
+}
+
+.project-doc-spacer-sm {
+  height: 12px;
+}
+
+.project-doc-spacer-md {
+  height: 24px;
+}
+
+.project-doc-spacer-lg {
+  height: 36px;
+}
+
+.project-doc-spacer-xl {
+  height: 52px;
+}
+
 .project-doc-markdown strong {
   color: #111827;
   font-weight: 800;

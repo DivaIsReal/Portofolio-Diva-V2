@@ -114,6 +114,10 @@ const portableTextComponents = {
   },
   hardBreak: () => <br />,
   types: {
+    spacer: ({ value }) => {
+      const size = ['sm', 'md', 'lg', 'xl'].includes(value?.size) ? value.size : 'md';
+      return <div className={`project-doc-spacer project-doc-spacer-${size}`} aria-hidden="true"></div>;
+    },
     commandBlock: ({ value }) => (
       <CommandCodeBlock code={value?.code || ''} />
     ),

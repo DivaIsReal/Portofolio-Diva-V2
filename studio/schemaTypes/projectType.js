@@ -153,6 +153,47 @@ export const projectType = defineType({
               };
             }
           }
+        },
+        {
+          type: 'object',
+          name: 'spacer',
+          title: 'Spacer',
+          fields: [
+            defineField({
+              name: 'size',
+              title: 'Size',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Small', value: 'sm' },
+                  { title: 'Medium', value: 'md' },
+                  { title: 'Large', value: 'lg' },
+                  { title: 'Extra Large', value: 'xl' }
+                ],
+                layout: 'radio'
+              },
+              initialValue: 'md',
+              validation: (Rule) => Rule.required()
+            })
+          ],
+          preview: {
+            select: {
+              size: 'size'
+            },
+            prepare({ size }) {
+              const labels = {
+                sm: 'Small',
+                md: 'Medium',
+                lg: 'Large',
+                xl: 'Extra Large'
+              };
+
+              return {
+                title: 'Spacer',
+                subtitle: `Size: ${labels[size] || 'Medium'}`
+              };
+            }
+          }
         }
       ],
       description: 'Use rich editor tools for headings, lists, tables-style content, and code/command blocks.',
