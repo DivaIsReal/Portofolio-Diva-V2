@@ -134,7 +134,7 @@ body.dark-mode .photo-caption {
   color: #f8fafc;
 }
 
-body.dark-mode .nav-menu-vertical a,
+body.dark-mode .nav-menu-vertical button,
 body.dark-mode .slider-toggle,
 body.dark-mode .location,
 body.dark-mode .sidebar-close-btn,
@@ -144,7 +144,7 @@ body.dark-mode .mobile-nav-trigger {
   border-color: #93c5fd;
 }
 
-body.dark-mode .nav-menu-vertical a i,
+body.dark-mode .nav-menu-vertical button i,
 body.dark-mode .avatar-large i,
 body.dark-mode .skill-card i,
 body.dark-mode .monitor-title i,

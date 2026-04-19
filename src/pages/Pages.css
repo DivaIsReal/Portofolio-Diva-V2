@@ -1161,6 +1161,13 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .project-doc-markdown table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    min-width: 520px;
+  }
+
   .project-link-btn,
   .project-detail-btn,
   .project-back-btn {
