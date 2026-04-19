@@ -9,14 +9,119 @@ import Dashboard from './pages/Dashboard';
 import Contact from './pages/Contact';
 import './App.css';
 
+const VALID_PAGES = ['home', 'about', 'contents', 'achievements', 'projects', 'dashboard', 'contact'];
+
+const PAGE_TO_PATH = {
+  home: '/',
+  about: '/about',
+  contents: '/contents',
+  achievements: '/achievements',
+  projects: '/projects',
+  dashboard: '/dashboard',
+  contact: '/contact'
+};
+
+const normalizePathname = (pathname) => {
+  if (!pathname) {
+    return '/';
+  }
+
+  if (pathname === '/') {
+    return '/';
+  }
+
+  return pathname.replace(/\/+$/, '').toLowerCase() || '/';
+};
+
+const getPageFromUrl = () => {
+  if (typeof window === 'undefined') {
+    return 'home';
+  }
+
+  const url = new URL(window.location.href);
+  const pathname = normalizePathname(url.pathname);
+  const fromPath = Object.entries(PAGE_TO_PATH).find(([, pagePath]) => pagePath === pathname)?.[0];
+
+  if (fromPath) {
+    return fromPath;
+  }
+
+  const legacyPageParam = url.searchParams.get('page');
+  return VALID_PAGES.includes(legacyPageParam) ? legacyPageParam : 'home';
+};
+
+const updatePageInUrl = (activePage, mode = 'push') => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  const nextPage = VALID_PAGES.includes(activePage) ? activePage : 'home';
+  url.pathname = PAGE_TO_PATH[nextPage] || '/';
+
+  url.searchParams.delete('page');
+
+  if (nextPage !== 'projects') {
+    url.searchParams.delete('project');
+  }
+
+  const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+  const nextState = { ...(window.history.state || {}), page: nextPage };
+
+  if (mode === 'replace') {
+    window.history.replaceState(nextState, '', nextUrl);
+    return;
+  }
+
+  window.history.pushState(nextState, '', nextUrl);
+};
+
 function App() {
-  const [activePage, setActivePage] = useState('home');
+  const [activePage, setActivePage] = useState(() => getPageFromUrl());
   const [theme, setTheme] = useState('light');
   const [language, setLanguage] = useState('id');
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', theme === 'dark');
   }, [theme]);
+
+  useEffect(() => {
+    updatePageInUrl(getPageFromUrl(), 'replace');
+
+    const handlePopState = () => {
+      setActivePage(getPageFromUrl());
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  const handleSetActivePage = (nextPage) => {
+    if (!VALID_PAGES.includes(nextPage)) {
+      return;
+    }
+
+    setActivePage(nextPage);
+    updatePageInUrl(nextPage, 'push');
+  };
+
+  useEffect(() => {
+    if (activePage === 'projects' || typeof window === 'undefined') {
+      return;
+    }
+
+    const url = new URL(window.location.href);
+
+    if (!url.searchParams.has('project')) {
+      return;
+    }
+
+    url.searchParams.delete('project');
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+  }, [activePage]);
 
   const renderPage = () => {
     switch(activePage) {
@@ -34,7 +139,7 @@ function App() {
   return (
     <div className="dashboard-container">
       <Sidebar
-        setActivePage={setActivePage}
+        setActivePage={handleSetActivePage}
         activePage={activePage}
         theme={theme}
         setTheme={setTheme}

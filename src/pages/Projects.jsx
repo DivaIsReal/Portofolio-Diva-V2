@@ -8,6 +8,37 @@ import { hasSanityConfig, sanityClient } from '../lib/sanity';
 
 const imageBuilder = sanityClient ? createImageUrlBuilder(sanityClient) : null;
 
+const getSelectedProjectFromUrl = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return new URLSearchParams(window.location.search).get('project');
+};
+
+const updateProjectParamInUrl = (projectId, mode = 'push') => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+
+  if (projectId) {
+    url.searchParams.set('project', projectId);
+  } else {
+    url.searchParams.delete('project');
+  }
+
+  const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+
+  if (mode === 'replace') {
+    window.history.replaceState({ project: projectId || null }, '', nextUrl);
+    return;
+  }
+
+  window.history.pushState({ project: projectId || null }, '', nextUrl);
+};
+
 const urlFromAssetRef = (assetRef) => {
   if (!assetRef || typeof assetRef !== 'string' || !sanityClient) {
     return null;
@@ -122,9 +153,21 @@ const markdownComponents = {
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(() => getSelectedProjectFromUrl());
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setSelectedProject(getSelectedProjectFromUrl());
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -234,7 +277,11 @@ const Projects = () => {
                 <button
                   type="button"
                   className="project-detail-btn"
-                  onClick={() => setSelectedProject(project.slug || project._id)}
+                  onClick={() => {
+                    const projectId = project.slug || project._id;
+                    setSelectedProject(projectId);
+                    updateProjectParamInUrl(projectId, 'push');
+                  }}
                 >
                   Lihat Detail
                 </button>
@@ -246,7 +293,14 @@ const Projects = () => {
         )
       ) : (
         <section className="project-detail">
-          <button type="button" className="project-back-btn" onClick={() => setSelectedProject(null)}>
+          <button
+            type="button"
+            className="project-back-btn"
+            onClick={() => {
+              setSelectedProject(null);
+              updateProjectParamInUrl(null, 'replace');
+            }}
+          >
             <i className="fas fa-arrow-left"></i> Kembali ke daftar project
           </button>
 
