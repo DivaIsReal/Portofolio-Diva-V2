@@ -548,6 +548,12 @@ h1 {
   color: #4b5563;
 }
 
+.project-doc-portable-paragraph {
+  margin: 8px 0;
+  color: #4b5563;
+  line-height: 1.7;
+}
+
 .project-doc-markdown strong {
   color: #111827;
   font-weight: 800;

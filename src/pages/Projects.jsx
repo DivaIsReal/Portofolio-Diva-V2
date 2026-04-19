@@ -109,6 +109,10 @@ const CommandCodeBlock = ({ code = '' }) => {
 };
 
 const portableTextComponents = {
+  block: {
+    normal: ({ children }) => <p className="project-doc-portable-paragraph">{children}</p>
+  },
+  hardBreak: () => <br />,
   types: {
     commandBlock: ({ value }) => (
       <CommandCodeBlock code={value?.code || ''} />
